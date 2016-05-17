@@ -40,9 +40,9 @@
     
     // instantiating todos
     
-    Todo *todo1 = [[Todo alloc] initWithTitle:@"Buy milk" description:@"Go to the market to buy milk" priority:1 details:@"Do it after work!"];
+    Todo *todo1 = [[Todo alloc] initWithTitle:@"Buy milk" description:@"Go to the market to buy milk" priority:3 details:@"Do it after work!"];
     Todo *todo2 = [[Todo alloc] initWithTitle:@"Running" description:@"Go for a run at Queen's Park" priority:2 details:@"Distance: 6 km"];
-    Todo *todo3 = [[Todo alloc] initWithTitle:@"Lunch" description:@"Go for lunch with Nanfa" priority:3 details:@"Time: 2pm"];
+    Todo *todo3 = [[Todo alloc] initWithTitle:@"Lunch" description:@"Go for lunch with Nanfa" priority:1 details:@"Time: 2pm"];
     
     NSArray *myTodos = @[todo1, todo2, todo3];
     
