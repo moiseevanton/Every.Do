@@ -14,6 +14,9 @@
 		E93724251CEB72D6005106BD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E93724231CEB72D6005106BD /* Main.storyboard */; };
 		E93724271CEB72D6005106BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93724261CEB72D6005106BD /* Assets.xcassets */; };
 		E937242A1CEB72D6005106BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E93724281CEB72D6005106BD /* LaunchScreen.storyboard */; };
+		E93724331CEB7309005106BD /* Todo.m in Sources */ = {isa = PBXBuildFile; fileRef = E93724321CEB7309005106BD /* Todo.m */; };
+		E93724361CEB7856005106BD /* TodoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E93724351CEB7856005106BD /* TodoCell.m */; };
+		E93724391CEB96E6005106BD /* NewTodo.m in Sources */ = {isa = PBXBuildFile; fileRef = E93724381CEB96E6005106BD /* NewTodo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,12 @@
 		E93724261CEB72D6005106BD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E93724291CEB72D6005106BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E937242B1CEB72D6005106BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E93724311CEB7309005106BD /* Todo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Todo.h; sourceTree = "<group>"; };
+		E93724321CEB7309005106BD /* Todo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Todo.m; sourceTree = "<group>"; };
+		E93724341CEB7856005106BD /* TodoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoCell.h; sourceTree = "<group>"; };
+		E93724351CEB7856005106BD /* TodoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoCell.m; sourceTree = "<group>"; };
+		E93724371CEB96E6005106BD /* NewTodo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewTodo.h; sourceTree = "<group>"; };
+		E93724381CEB96E6005106BD /* NewTodo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTodo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +81,12 @@
 				E93724281CEB72D6005106BD /* LaunchScreen.storyboard */,
 				E937242B1CEB72D6005106BD /* Info.plist */,
 				E93724171CEB72D6005106BD /* Supporting Files */,
+				E93724311CEB7309005106BD /* Todo.h */,
+				E93724321CEB7309005106BD /* Todo.m */,
+				E93724341CEB7856005106BD /* TodoCell.h */,
+				E93724351CEB7856005106BD /* TodoCell.m */,
+				E93724371CEB96E6005106BD /* NewTodo.h */,
+				E93724381CEB96E6005106BD /* NewTodo.m */,
 			);
 			path = Every.Do;
 			sourceTree = "<group>";
@@ -154,8 +169,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E93724331CEB7309005106BD /* Todo.m in Sources */,
 				E937241C1CEB72D6005106BD /* AppDelegate.m in Sources */,
 				E937241F1CEB72D6005106BD /* MasterViewController.m in Sources */,
+				E93724391CEB96E6005106BD /* NewTodo.m in Sources */,
+				E93724361CEB7856005106BD /* TodoCell.m in Sources */,
 				E93724191CEB72D6005106BD /* main.m in Sources */,
 				E93724221CEB72D6005106BD /* DetailViewController.m in Sources */,
 			);

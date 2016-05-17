@@ -8,10 +8,17 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "TodoCell.h"
+#import "NewTodo.h"
 
-@interface MasterViewController ()
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NewTodoDelegate>
 
 @property NSMutableArray *objects;
+
+@property Todo *doneTodo;
+
+- (void)back;
+
 @end
 
 @implementation MasterViewController
@@ -24,6 +31,23 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    
+    self.tableView.rowHeight = 70;
+    
+    // creating an empty array
+    
+    self.objects = [NSMutableArray new];
+    
+    // instantiating todos
+    
+    Todo *todo1 = [[Todo alloc] initWithTitle:@"Buy milk" description:@"Go to the market to buy milk" priority:1 details:@"Do it after work!"];
+    Todo *todo2 = [[Todo alloc] initWithTitle:@"Running" description:@"Go for a run at Queen's Park" priority:2 details:@"Distance: 6 km"];
+    Todo *todo3 = [[Todo alloc] initWithTitle:@"Lunch" description:@"Go for lunch with Nanfa" priority:3 details:@"Time: 2pm"];
+    
+    NSArray *myTodos = @[todo1, todo2, todo3];
+    
+    [self.objects addObjectsFromArray:myTodos];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -40,9 +64,8 @@
     if (!self.objects) {
         self.objects = [[NSMutableArray alloc] init];
     }
-    [self.objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    [self performSegueWithIdentifier:@"enterTodo" sender:nil];
 }
 
 #pragma mark - Segues
@@ -50,11 +73,17 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = self.objects[indexPath.row];
+        Todo *ourTodo = self.objects[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setDetailItem:object];
+        [controller setTodo:ourTodo];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
         controller.navigationItem.leftItemsSupplementBackButton = YES;
+    }
+    if ([segue.identifier isEqualToString:@"enterTodo"]) {
+        
+        NewTodo *todo = (NewTodo *)segue.destinationViewController;
+        
+        todo.delegate = self;
     }
 }
 
@@ -69,10 +98,33 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    TodoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OurCell" forIndexPath:indexPath];
 
-    NSDate *object = self.objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    Todo *ourTodo = self.objects[indexPath.row];
+    cell.title.text = ourTodo.title;
+    cell.theDescription.text = ourTodo.theDescription;
+    cell.priority.text = [NSString stringWithFormat:@"Priority: %d", ourTodo.priorityNumber];
+    
+    if (ourTodo.isCompleted) {
+        
+        NSMutableAttributedString *newTitle = [[NSMutableAttributedString alloc] initWithString:ourTodo.title];
+        [newTitle addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, [newTitle length])];
+        cell.title.attributedText = newTitle;
+        
+        NSMutableAttributedString *newDescription = [[NSMutableAttributedString alloc] initWithString:ourTodo.theDescription];
+        [newDescription addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, [newDescription length])];
+        cell.theDescription.attributedText = newDescription;
+        
+        NSMutableAttributedString *newPriority = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Priority: %d", ourTodo.priorityNumber]];
+        [newPriority addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, [ [NSString stringWithFormat:@"Priority: %d", ourTodo.priorityNumber] length])];
+        cell.priority.attributedText = newPriority;
+        
+    }
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiping:)];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [cell addGestureRecognizer:swipe];
+    
     return cell;
 }
 
@@ -90,4 +142,41 @@
     }
 }
 
+- (void)addTodo:(Todo *)theNewTodo{
+    
+    [self.objects insertObject:theNewTodo atIndex:0];
+    [self.tableView reloadData];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"selected section: %ld, row: %ld", indexPath.section, indexPath.row);
+}
+
+- (void)swiping:(UISwipeGestureRecognizer *)sender {
+    
+    Todo *completedTodo = [Todo new];
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        
+        UITableViewCell *cell = (UITableViewCell *)sender.view;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        if (self.objects[indexPath.row] != nil) {
+            
+            completedTodo = self.objects[indexPath.row];
+            completedTodo.isCompleted = YES;
+            self.doneTodo = completedTodo;
+            
+        }
+        
+    }
+    [self.tableView reloadData];
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(back) userInfo:nil repeats:NO];
+}
+
+- (void)back {
+    
+    [self.objects removeObject:self.doneTodo];
+    [self.objects addObject:self.doneTodo];
+    [self.tableView reloadData];
+}
 @end
